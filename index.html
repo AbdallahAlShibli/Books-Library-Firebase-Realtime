@@ -185,7 +185,7 @@
                                     <h2 class="fw-bold text-white mb-3" style="font-size: 22.992px;margin-top: 45px;">We
                                         are appreciative that you have selected Libro Sphere&nbsp;</h2>
                                     <div class="my-3"></div><a class="btn btn-primary" role="button"
-                                        style="width: 180px;margin-left: 74px;" href="books.html">Books library</a>
+                                        style="width: 180px;margin-left: 74px;" onclick="booksPage()">Books library</a>
                                 </div>
                             </div>
                             <div class="col-md-6 order-first order-md-last" style="min-height: 250px;"><img
@@ -271,7 +271,22 @@
     <script src="assets/js/Table-With-Search-search-table.js"></script>
     <script src="assets/js/theme.js"></script>
 
+    <script>
+        function booksPage() {
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    // User is signed in, redirect to another page
+                    window.location.href = "books.html";
 
+
+                } else {
+                    // User is not signed in
+
+                    alert("No user is signed in");
+                }
+            });
+        }
+    </script>
 </body>
 
 
