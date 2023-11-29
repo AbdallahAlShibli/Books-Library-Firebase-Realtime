@@ -101,6 +101,9 @@
                                 <a class="nav-link active" href="admin_issued_books.html"><span>Issued Book</span></a>
                             </div>
                             <div>
+                                <a class="nav-link active" id="logoutButton" onclick="LogOut()"><span>Logout</span></a>
+                            </div>
+                            <div>
                                 <div id="collapseLayouts" class="collapse" aria-labelledby="headingOne"
                                     data-bs-parent="#sidenavAccordion">
                                     <div class="sb-sidenav-menu-nested nav"><a class="nav-link" href="#">Menu
@@ -167,10 +170,12 @@
                                                     </tr> -->
                                                 </tbody>
                                             </table>
-                                        </div><button class="btn btn-primary" type="button"
-                                            style="width: 155.333px;" onclick="reportForBook()">Returned&nbsp;</button><button
+                                        </div><button class="btn btn-primary" type="button" style="width: 155.333px;"
+                                            onclick="reportForBook()">Returne&nbsp;</button>
+
+                                        <!-- <button
                                             class="btn btn-danger" type="button"
-                                            style="width: 142.333px;margin-left: 38px;" onclick="reportForBook()">expierd</button>
+                                            style="width: 142.333px;margin-left: 38px;" onclick="reportForBook()">expierd</button> -->
                                     </div>
                                 </div>
                             </div>
@@ -227,6 +232,43 @@
 
         firebase.initializeApp(firebaseConfig);
         console.log("Error:  " + firebase.authDomain);
+
+
+
+
+
+        var logoutBtn = document.getElementById("logoutButton");
+        // Check the user's login status
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                // User is signed in
+                logoutBtn.style.display = "block";
+                console.log("user: " + user.uid);
+
+
+
+
+            } else {
+                // User is not signed in
+                logoutBtn.style.display = "none";
+                console.log("No user is signed in");
+            }
+        });
+
+
+        function LogOut() {
+            firebase.auth().signOut().then(function () {
+                console.log('Signed Out');
+                window.location.href = "index.html";
+            }, function (error) {
+                console.error('Sign Out Error', error);
+            });
+        }
+
+
+
+
+
         // Reference to your Firebase Realtime Database
         var database = firebase.database();
         var tableRef = database.ref('issuedBooks'); // Assuming you have a 'issuedBooks' node in your database
@@ -310,9 +352,9 @@
             });
 
 
-            function reportForBook(){
-                window.location.href = "admin_issue_book.html";
-            }
+        function reportForBook() {
+            window.location.href = "admin_issue_book.html";
+        }
 
     </script>
 </body>

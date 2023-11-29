@@ -106,16 +106,21 @@
                             href="login.html">Log
                             In</a><a id="registerButton" class="btn btn-primary" role="button" href="register.html"
                             style="background: rgb(12,19,179);margin-left: 33px;margin-right: 0px;">Register</a>
+                        <a id="logoutButton" class="btn btn-primary" role="button"
+                            style="background: rgb(12,19,179);margin-left: 33px;margin-right: 0px;"
+                            onclick="LogOut()">LogOut</a>
                     </div>
                     <script>
                         var loginBtn = document.getElementById("loginButton");
                         var registerBtn = document.getElementById("registerButton");
+                        var logoutBtn = document.getElementById("logoutButton");
                         // Check the user's login status
                         firebase.auth().onAuthStateChanged(function (user) {
                             if (user) {
                                 // User is signed in, redirect to another page
                                 loginBtn.style.display = "none";
                                 registerBtn.style.display = "none";
+                                logoutBtn.style.display = "block";
                                 console.log("user: " + user.uid);
 
 
@@ -125,9 +130,19 @@
                                 // User is not signed in
                                 loginBtn.style.display = "block";
                                 registerBtn.style.display = "block";
+                                logoutBtn.style.display = "none";
                                 console.log("No user is signed in");
                             }
                         });
+
+
+                        function LogOut() {
+                            firebase.auth().signOut().then(function () {
+                                console.log('Signed Out');
+                            }, function (error) {
+                                console.error('Sign Out Error', error);
+                            });
+                        }
                     </script>
                 </nav>
                 <h1

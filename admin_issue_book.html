@@ -53,6 +53,11 @@
     <link rel="stylesheet" href="assets/css/Table-With-Search.css">
     <link rel="stylesheet" href="assets/css/Tamplate-SB-Admin-on-BSS.css">
     <link rel="stylesheet" href="assets/css/User-Payment-Overview-Rows---Panel-Container.css">
+
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-database.js"></script>
 </head>
 
 <body>
@@ -91,15 +96,22 @@
             <div id="layoutSidenav_nav">
                 <div id="sidenavAccordion" class="sb-sidenav accordion sb-sidenav-dark">
                     <div class="sb-sidenav-menu">
-                        <div class="nav"></div><a class="btn" role="button" href="Admin_issue_book.html"
-                            style="margin-top: 1px;margin-right: -9px;margin-left: -27px;color: rgb(255,254,254);">Issue
-                            Book</a>
+                        <div class="nav">
+                            <div>
+                                <a class="nav-link active" href="Admin_issue_book.html">Issue
+                                    Book</a>
+                            </div>
+                            <div>
+                                <a class="nav-link active" href="admin_issued_books.html">Issued Book</a>
+                            </div>
+                            <div>
+                                <a class="nav-link active" id="logoutButton" onclick="LogOut()"><span>Logout</span></a>
+                            </div>
+                        </div>
+
                     </div>
-                    <div class="sb-sidenav-menu" style="margin-top: 43px;padding-top: 52px;">
-                        <div class="nav"></div><a class="btn" role="button"
-                            style="margin-bottom: 350px;padding-top: 0px;margin-top: -343px;margin-left: -31px;color: rgb(252,252,253);"
-                            href="admin_issued_books.html">Issued Book</a>
-                    </div>
+
+
                     <div class="sb-sidenav-menu">
                         <div class="nav"></div>
                     </div>
@@ -116,40 +128,48 @@
                             <h1>Issue Book</h1>
                             <div class="row form-group">
                                 <div class="col-sm-4 label-column"><label class="col-form-label"
-                                        for="name-input-field">Name </label></div>
-                                <div class="col-sm-6 input-column"><input class="form-control" type="text"></div>
+                                        for="name-input-field">Name:</label></div>
+                                <div class="col-sm-6 input-column"><input class="form-control" id="userName"
+                                        type="text" /></div>
                             </div>
                             <div class="row form-group">
                                 <div class="col-sm-4 label-column"><label class="col-form-label"
-                                        for="email-input-field">Email </label></div>
-                                <div class="col-sm-6 input-column"><input class="form-control" type="email"></div>
+                                        for="email-input-field">id number: </label></div>
+                                <div class="col-sm-6 input-column"><input class="form-control" id="idNumber"
+                                        type="text"></div>
                             </div>
                             <div class="row form-group">
                                 <div class="col-sm-4 label-column"><label class="col-form-label"
-                                        for="pawssword-input-field">ID Number</label></div>
-                                <div class="col-sm-6 input-column"><input class="form-control" type="password"></div>
+                                        for="pawssword-input-field">Name Of The Book: </label></div>
+                                <div class="col-sm-6 input-column"><input class="form-control" id="bookName"
+                                        type="text"></div>
                             </div>
                             <div class="row form-group">
                                 <div class="col-sm-4 label-column"><label class="col-form-label"
-                                        for="repeat-pawssword-input-field">Book Name</label></div>
-                                <div class="col-sm-6 input-column"><input class="form-control" type="text"></div>
+                                        for="repeat-pawssword-input-field">Serial number: </label></div>
+                                <div class="col-sm-6 input-column"><input class="form-control" id="serialNumber"
+                                        type="text"></div>
                             </div>
-                            <div class="row form-group">
-                                <div class="col-sm-4 label-column"><label class="col-form-label"
-                                        for="repeat-pawssword-input-field">Book Number</label></div>
-                                <div class="col-sm-6 input-column"><input class="form-control" type="text"></div>
-                            </div>
-                            <div class="row form-group">
+
+                            <!-- <div class="row form-group">
                                 <div class="col-sm-4 label-column"><label class="col-form-label"
                                         for="repeat-pawssword-input-field">Issue Date</label></div>
                                 <div class="col-sm-6 input-column"><input class="form-control" type="date"></div>
+                            </div> -->
+                            <div class="row form-group">
+                                <div class="col-sm-4 label-column"><label class="col-form-label"
+                                        for="repeat-pawssword-input-field">Return Date: </label></div>
+                                <div class="col-sm-6 input-column"><input class="form-control" id="returnDate"
+                                        type="date"></div>
                             </div>
                             <div class="row form-group">
                                 <div class="col-sm-4 label-column"><label class="col-form-label"
-                                        for="repeat-pawssword-input-field">Return Date</label></div>
-                                <div class="col-sm-6 input-column"><input class="form-control" type="date"></div>
+                                        for="repeat-pawssword-input-field">Status: </label></div>
+                                <div class="col-sm-6 input-column"><input class="form-control" id="status" type="text">
+                                </div>
                             </div>
-                            <p></p><button class="btn btn-light submit-button" type="button">Issue</button>
+                            <p></p><button class="btn btn-light submit-button" type="button"
+                                onclick="issueFunction()">Issue</button>
                         </form>
                     </div>
                 </div>
@@ -184,6 +204,101 @@
     <script src="assets/js/Swiper-Card-Blog-swiper.js"></script>
     <script src="assets/js/Table-With-Search-search-table.js"></script>
     <script src="assets/js/theme.js"></script>
+
+
+    <script>
+        // Import the functions you need from the SDKs you need
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAOwGBvYe1w_vFFVOeF04Uhhot7-CX4Hk8",
+            authDomain: "librosphere-9b371.firebaseapp.com",
+            projectId: "librosphere-9b371",
+            storageBucket: "librosphere-9b371.appspot.com",
+            databaseURL: "librosphere-9b371-default-rtdb.firebaseio.com",
+            messagingSenderId: "103165721536",
+            appId: "1:103165721536:web:e02a086e341b6738152625",
+            measurementId: "G-3SYC6MFZE7"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        console.log("Error:  " + firebase.authDomain);
+
+
+        var logoutBtn = document.getElementById("logoutButton");
+        // Check the user's login status
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                // User is signed in
+                logoutBtn.style.display = "block";
+                console.log("user: " + user.uid);
+
+
+
+
+            } else {
+                // User is not signed in
+                logoutBtn.style.display = "none";
+                console.log("No user is signed in");
+            }
+        });
+
+
+        function LogOut() {
+            firebase.auth().signOut().then(function () {
+                console.log('Signed Out');
+                window.location.href = "index.html";
+            }, function (error) {
+                console.error('Sign Out Error', error);
+            });
+        }
+
+
+
+
+
+        // Reference to your Firebase Realtime Database
+        var database = firebase.database();
+        // var tableRef = database.ref('issuedBooks'); // Assuming you have a 'issuedBooks' node in your database
+
+
+
+        // bookNameIN = bookNameIN.trim();
+
+        function issueFunction() {
+
+            var userNameIN = document.getElementById("userName").value;
+            var idUIN = document.getElementById("idNumber").value;
+            var bookNameIN = document.getElementById("bookName").value;
+            var serialIN = document.getElementById("serialNumber").value;
+            var returnDateIN = document.getElementById("returnDate").value;
+            var statusIN = document.getElementById("status").value;
+            console.log(bookName);
+            if (((userNameIN != "") & (idUIN != "") & (bookNameIN != "") & (serialIN != "") & (returnDateIN != "") & (statusIN != ""))) {
+            setTimeout(function () {
+                firebase.database().ref("issuedBooks/" + bookNameIN).set({
+                    usreFullName: userNameIN,
+                    userID: idUIN,
+                    bookName: bookNameIN,
+                    serialNumber: serialIN,
+                    returnDate: returnDateIN,
+                    status: statusIN
+                });
+
+                alert("Book Details Updated!");
+            }, 2000);
+
+            } else {
+                alert("Something missing, check all field then try again!");
+            }
+        }
+
+
+
+
+
+
+    </script>
+
 </body>
 
 </html>

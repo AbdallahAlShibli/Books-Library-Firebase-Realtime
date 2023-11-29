@@ -82,6 +82,8 @@
                     id="registerButton">Register</a>
                 <a class="btn" role="button" href="login.html" id="loginButton"
                     style="margin-top: -10px;color: rgb(250,250,255);margin-left: -73px;">Login</a>
+                <a class="btn" role="button" id="logoutButton"
+                    style="margin-top: -10px;color: rgb(250,250,255);margin-left: -73px;">LogOut</a>
                 <hr class="sidebar-divider my-0">
 
 
@@ -214,7 +216,8 @@
                                             class="dropdown-item" href="#"><i
                                                 class="fas fa-list fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Activity
                                             log</a>
-                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#"><i
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#"
+                                            id="logout"><i
                                                 class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Logout</a>
                                     </div>
                                 </div>
@@ -312,24 +315,38 @@
         var idU = "";
         var loginBtn = document.getElementById("loginButton");
         var registerBtn = document.getElementById("registerButton");
+        var logoutBtn = document.getElementById("logoutButton");
         // Check the user's login status
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
                 // User is signed in, redirect to another page
                 loginBtn.style.display = "none";
                 registerBtn.style.display = "none";
+                logoutBtn.style.display = "block";
                 console.log("user: " + user.uid);
 
-                idU = (user.uid).trim();
+
 
 
             } else {
                 // User is not signed in
                 loginBtn.style.display = "block";
                 registerBtn.style.display = "block";
+                logoutBtn.style.display = "none";
                 console.log("No user is signed in");
             }
         });
+
+
+        function LogOut() {
+            firebase.auth().signOut().then(function () {
+                console.log('Signed Out');
+            }, function (error) {
+                console.error('Sign Out Error', error);
+            });
+        }
+
+
 
 
 
@@ -354,9 +371,7 @@
           <picture><img src="${bookData.imageSrc}" style="width: 157px;height: 213.292px;" width="157" height="213"></picture>
           <div class="d-flex media">
             <div></div>
-            <div class="media-body">
-              <h4><a href="#" style="font-size: 30px;">${bookData.author}</a></h4>
-            </div>
+
           </div>
         </div>
         <div class="col-md-4" style="padding-bottom: 20px;margin-bottom: -1px;">
@@ -466,16 +481,16 @@
                             var userName = child.child("firstName").val() + " " + child.child("lastName").val();
                             var bookName = bookDataList2[result].name;
                             var serial = bookDataList2[result].serialNumber;
-                                firebase.database().ref("issuedBooks/" + bookName).set({
-                                    usreFullName: userName,
-                                    userID: idU,
-                                    bookName: bookName,
-                                    serialNumber: serial,
-                                    returnDate: formattedIncreasedDate,
-                                    status: "N"
-                                });
+                            firebase.database().ref("issuedBooks/" + bookName).set({
+                                usreFullName: userName,
+                                userID: idU,
+                                bookName: bookName,
+                                serialNumber: serial,
+                                returnDate: formattedIncreasedDate,
+                                status: "Borrowed"
+                            });
 
-                                alert("Book Details sent to the Admin!");
+                            alert("Book Details sent to the Admin!");
                         }
 
                     });
@@ -485,6 +500,9 @@
                 // }
             }
         }
+
+
+
 
 
     </script>
